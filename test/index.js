@@ -4,6 +4,7 @@ var domify = require("domify");
 var nextTick = require("next-tick");
 var text = require("text");
 var trigger = require("trigger-event");
+var type = require("type");
 var InlineEdit = require("inlineedit");
 
 describe("InlineEdit(settings)", function () {
@@ -24,11 +25,205 @@ describe("InlineEdit(settings)", function () {
         expect(instance.form.elements).to.have.length(3);
     });
 
+    it("should create an interface element", function () {
+        expect(instance.interface).to.be.ok();
+        expect(instance.interface.tagName).to.equal("INPUT");
+    });
+
     it("should create a spinner element", function () {
         expect(instance.spinner).to.be.ok();
         expect(instance.spinner.tagName).to.equal("DIV");
         expect(text(instance.spinner)).to.equal("Saving…");
     });
+
+
+    describe("#parseValue(el)", function () {
+        var fn = InlineEdit.prototype.parseValue;
+
+        it("should return the text content of the element", function () {
+            var el = document.createElement("div");
+            text(el, "Hello World");
+
+            expect(fn(el)).to.equal("Hello World");
+        });
+
+        it("should return a trimmed string", function () {
+            var el = document.createElement("div");
+            text(el, "  Hello World ");
+
+            expect(fn(el)).to.equal("Hello World");
+        });
+    });
+
+    describe("#formatValue(val, el)", function () {
+        var fn = InlineEdit.prototype.formatValue;
+
+        it("should set the text content of the element", function () {
+            var el = document.createElement("div");
+            fn("Hello World", el);
+
+            expect(text(el)).to.equal("Hello World");
+        });
+
+        it("should trim the text content", function () {
+            var el = document.createElement("div");
+            fn("  Hello World   ", el);
+
+            expect(text(el)).to.equal("Hello World");
+        });
+    });
+
+    describe("#generateForm", function () {
+        var prop = InlineEdit.prototype.generateForm;
+
+        it("should be a string by default", function () {
+            expect(prop).to.be.a("string");
+        });
+
+        it("should be our default form", function () {
+            var frag = domify(prop);
+
+            expect(frag.tagName).to.equal("FORM");
+            expect(frag.elements[0].tagName).to.equal("BUTTON");
+            expect(frag.elements[1].tagName).to.equal("BUTTON");
+        });
+
+        it("should create a form element", function () {
+            var instance = createInstance();
+            expect(instance.form).to.be.a(HTMLFormElement);
+            destroyInstance(instance);
+        });
+    });
+
+    describe("#generateInterface", function () {
+        var prop = InlineEdit.prototype.generateInterface;
+
+        it("should be a string by default", function () {
+            expect(prop).to.be.a("string");
+        });
+
+        it("should be our default interface", function () {
+            var frag = domify(prop);
+
+            expect(frag.tagName).to.equal("INPUT");
+            expect(frag.type).to.equal("text");
+        });
+
+        it("should create an input element", function () {
+            var instance = createInstance();
+            expect(instance.interface.tagName).to.be.equal("INPUT");
+            destroyInstance(instance);
+        });
+    });
+
+    describe("#generateSpinner", function () {
+        var prop = InlineEdit.prototype.generateSpinner;
+
+        it("should be a string by default", function () {
+            expect(prop).to.be.a("string");
+        });
+
+        it("should be our default spinner", function () {
+            var frag = domify(prop);
+
+            expect(frag.tagName).to.equal("DIV");
+            expect(text(frag)).to.contain("Saving");
+        });
+
+        it("should create a div element", function () {
+            var instance = createInstance();
+            expect(instance.spinner).to.be.a(HTMLDivElement);
+            destroyInstance(instance);
+        });
+    });
+
+    describe("#prepareForm(input, form)", function () {
+        var fn = InlineEdit.prototype.prepareForm;
+
+        it("should insert the input before any other elements", function () {
+            var form = domify(InlineEdit.prototype.generateForm);
+            var input = domify(InlineEdit.prototype.generateInterface);
+
+            fn(input, form);
+
+            expect(input).to.equal(form.firstChild);
+        });
+    });
+
+    describe("#populateForm(val, form)", function () {
+        var fn = InlineEdit.prototype.populateForm;
+
+        it("should set the first input's value", function () {
+            var el = domify("<form><input></form>");
+            var input = el.elements[0];
+
+            expect(input.value).to.equal("");
+            fn("Hello World", el);
+            expect(input.value).to.equal("Hello World");
+        });
+
+        it("should focus on the first input", function () {
+            var el = domify("<form><input></form>");
+            document.body.appendChild(el);
+
+            fn("Hello World", el);
+            expect(el.elements[0]).to.equal(document.activeElement);
+
+            document.body.removeChild(el);
+        });
+    });
+
+    describe("#processForm(form)", function () {
+        var fn = InlineEdit.prototype.processForm;
+
+        it("should return the first input's value", function () {
+            var el = domify("<form><input value=\"Hello World\"></form>");
+
+            expect(fn(el)).to.equal("Hello World");
+        });
+    });
+
+    describe("#submitForm(val)", function () {
+        var fn = InlineEdit.prototype.submitForm;
+
+        it("should run the callback function", function (done) {
+            fn(null, done);
+        });
+
+        it("should not pass arguments", function (done) {
+            fn(null, function () {
+                expect(arguments).to.not.have.length();
+                done();
+            });
+        });
+    });
+
+
+    describe("#normalizeElement(el)", function () {
+        var fn = InlineEdit.prototype.normalizeElement;
+
+        it("should domify a string", function () {
+            expect(type(fn("<div></div>"))).to.equal("element");
+        });
+
+        it("should return an element reference (without modification)", function () {
+            var el = document.createElement("div");
+            expect(fn(el)).to.equal(el);
+        });
+
+        it("should invoke the function and proxy back through", function () {
+            var instance = createInstance();
+            var el = document.createElement("div");
+
+            function generate() {
+                return el;
+            }
+
+            expect(instance.normalizeElement(generate)).to.equal(el);
+            destroyInstance(instance);
+        });
+    });
+
 
     describe("states", function () {
         describe("ready", function () {
@@ -205,232 +400,6 @@ describe("InlineEdit(settings)", function () {
                     destroyInstance(instance);
                     done();
                 });
-            });
-        });
-    });
-
-    describe("#parseValue(el)", function () {
-        var fn = InlineEdit.prototype.parseValue;
-
-        it("should return the text content of the element", function () {
-            var el = document.createElement("div");
-            text(el, "Hello World");
-
-            expect(fn(el)).to.equal("Hello World");
-        });
-
-        it("should return a trimmed string", function () {
-            var el = document.createElement("div");
-            text(el, "  Hello World ");
-
-            expect(fn(el)).to.equal("Hello World");
-        });
-    });
-
-    describe("#formatValue(val, el)", function () {
-        var fn = InlineEdit.prototype.formatValue;
-
-        it("should set the text content of the element", function () {
-            var el = document.createElement("div");
-            fn("Hello World", el);
-
-            expect(text(el)).to.equal("Hello World");
-        });
-
-        it("should trim the text content", function () {
-            var el = document.createElement("div");
-            fn("  Hello World   ", el);
-
-            expect(text(el)).to.equal("Hello World");
-        });
-    });
-
-    describe("#generateForm", function () {
-        var prop = InlineEdit.prototype.generateForm;
-
-        it("should be a string by default", function () {
-            expect(prop).to.be.a("string");
-        });
-
-        it("should be our default form", function () {
-            var frag = domify(prop);
-
-            expect(frag.tagName).to.equal("FORM");
-            expect(frag.elements[0].tagName).to.equal("INPUT");
-            expect(frag.elements[1].tagName).to.equal("BUTTON");
-            expect(frag.elements[2].tagName).to.equal("BUTTON");
-        });
-
-        it("should domify the string by default", function () {
-            var instance = createInstance();
-
-            expect(instance.form).to.be.a(HTMLFormElement);
-            destroyInstance(instance);
-        });
-
-        it("should use an existing DOM element", function () {
-            var el = domify("<form></form>");
-
-            var instance = createInstance({
-                generateForm: el
-            });
-
-            expect(instance.form).to.equal(el);
-            destroyInstance(instance);
-        });
-
-        describe("using a function", function () {
-            it("should use the instance as the context", function () {
-                var instance = createInstance({
-                    generateForm: function () {
-                        expect(this).to.be.a(InlineEdit);
-                        return "<form></form>";
-                    }
-                });
-
-                destroyInstance(instance);
-            });
-
-            it("should use a returned element reference", function () {
-                var el = document.createElement("form");
-
-                var instance = createInstance({
-                    generateForm: function () {
-                        return el;
-                    }
-                });
-
-                expect(instance.form).to.equal(el);
-                destroyInstance(instance);
-            });
-
-            it("should domify a returned string", function () {
-                var instance = createInstance({
-                    generateForm: function () {
-                        return "<div></div>";
-                    }
-                });
-
-                expect(instance.form.tagName).to.equal("DIV");
-                destroyInstance(instance);
-            });
-        });
-    });
-
-    describe("#generateSpinner", function () {
-        var prop = InlineEdit.prototype.generateSpinner;
-
-        it("should be a string by default", function () {
-            expect(prop).to.be.a("string");
-        });
-
-        it("should be our default spinner", function () {
-            var frag = domify(prop);
-
-            expect(frag.tagName).to.equal("DIV");
-            expect(text(frag)).to.contain("Saving");
-        });
-
-        it("should domify the string by default", function () {
-            var instance = createInstance();
-
-            expect(instance.spinner).to.be.a(HTMLDivElement);
-            destroyInstance(instance);
-        });
-
-        it("should use an existing DOM element", function () {
-            var el = domify("<div></div>");
-
-            var instance = createInstance({
-                generateSpinner: el
-            });
-
-            expect(instance.spinner).to.equal(el);
-            destroyInstance(instance);
-        });
-
-        describe("using a function", function () {
-            it("should use the instance as the context", function () {
-                var instance = createInstance({
-                    generateSpinner: function () {
-                        expect(this).to.be.a(InlineEdit);
-                        return "<form></form>";
-                    }
-                });
-
-                destroyInstance(instance);
-            });
-
-            it("should use a returned element reference", function () {
-                var el = document.createElement("div");
-
-                var instance = createInstance({
-                    generateSpinner: function () {
-                        return el;
-                    }
-                });
-
-                expect(instance.spinner).to.equal(el);
-                destroyInstance(instance);
-            });
-
-            it("should domify a returned string", function () {
-                var instance = createInstance({
-                    generateSpinner: function () {
-                        return "<span></span>";
-                    }
-                });
-
-                expect(instance.spinner.tagName).to.equal("SPAN");
-                destroyInstance(instance);
-            });
-        });
-    });
-
-    describe("#prepareForm(val, form)", function () {
-        var fn = InlineEdit.prototype.prepareForm;
-
-        it("should set the first input's value", function () {
-            var el = domify("<form><input></form>");
-            var input = el.elements[0];
-
-            expect(input.value).to.equal("");
-            fn("Hello World", el);
-            expect(input.value).to.equal("Hello World");
-        });
-
-        it("should focus on the first input", function () {
-            var el = domify("<form><input></form>");
-            document.body.appendChild(el);
-
-            fn("Hello World", el);
-            expect(el.elements[0]).to.equal(document.activeElement);
-
-            document.body.removeChild(el);
-        });
-    });
-
-    describe("#processForm(form)", function () {
-        var fn = InlineEdit.prototype.processForm;
-
-        it("should return the first input's value", function () {
-            var el = domify("<form><input value=\"Hello World\"></form>");
-
-            expect(fn(el)).to.equal("Hello World");
-        });
-    });
-
-    describe("#submitForm(val)", function () {
-        var fn = InlineEdit.prototype.submitForm;
-
-        it("should run the callback function", function (done) {
-            fn(null, done);
-        });
-
-        it("should not pass arguments", function (done) {
-            fn(null, function () {
-                expect(arguments).to.not.have.length();
-                done();
             });
         });
     });

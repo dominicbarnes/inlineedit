@@ -60,10 +60,11 @@ to reflect that new value.
 The default behavior is to take `val`, trim it and set that `String` as the
 text content of the element. (`el`)
 
-### generateForm() / generateForm
+### generateForm
 
-This property/method is responsible for constructing the `<form>` that will
-take the user's input.
+This property/method is responsible for constructing the container `<form>`
+that will take the user's input. This does **not** define the interface itself,
+(eg: an `<input>` or `<textarea>`) see `generateInterface`.
 
 It can take several forms. If it is a `String`, then it is run through
 [domify](http://github.com/component/domify). If it is a `Function`, then that
@@ -79,7 +80,17 @@ this list as minimal as possible)
 
 The default is the `String` contents of `form.html`.
 
-### generateSpinner() / generateSpinner
+### generateInterface
+
+This property/method is responsible for constructing the interface that the user
+will be presented with for editing. (eg: an `<input>`, `<textarea>` or similar)
+
+Like `generateForm`, it can take a `String`, `HTMLElement` or `Function` as
+it's only argument.
+
+The default is the `String` contents of `interface.html`.
+
+### generateSpinner
 
 This property/method is responsible for constructing the element that will be
 displayed to the user while the submission is being processed.
@@ -89,13 +100,28 @@ The generated element should meet the following criteria:
 
  * it *should* be a block-level element (eg: `<div>`)
 
+Like `generateForm`, it can take a `String`, `HTMLElement` or `Function` as
+it's only argument.
+
 The default is the `String` contents of `spinner.html`
 
-### prepareForm(val, form)
+### prepareForm(input, form)
+
+This method merges the results of `generateForm` and `generateInterface`. You
+can use this to customize how your interface fits into the form.
+
+This only runs **once** (during initialization)
+
+The default is to prepend the interface (assuming it's only a single element)
+to the form.
+
+### populateForm(val, form)
 
 This method takes the adjust the input element(s) of `form` (see `generateForm`)
 and sets their value(s) to reflect `val`. (see `parseValue`) It is run each time
 the user activates the form by clicking on the root element.
+
+This runs each time the component enters "editing" mode.
 
 The default behavior is to set `form.elements[0].value = val;`. (in other words,
 sets the first input's value)
@@ -105,7 +131,7 @@ sets the first input's value)
 This method takes the `form` and processes the element(s) it contains and turns
 that into a single value.
 
-The default behavior is to return `form.elements[0].value`.
+The default behavior is to return the first input's value.
 
 ### submitForm(val, done)
 
