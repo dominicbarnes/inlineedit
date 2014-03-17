@@ -1,0 +1,29 @@
+{
+  "name": "inlineedit",
+  "dependencies": {
+    "component/classes": "*",
+    "component/domify": "*",
+    "component/events": "*",
+    "component/trim": "*",
+    "component/type": "*",
+    "ifandelse/machina.js": "*",
+    "matthewp/text": "*",
+    "yields/empty": "*",
+    "yields/wrap": "*"
+  },
+  "development": {
+    "adamsanderson/trigger-event": "*",
+    "dominicbarnes/expect.js": "*",
+    "timoxley/next-tick": "*"
+  },
+  "scripts": [
+    "index.js"
+  ],
+  "styles": [
+    "style.css"
+  ],
+  "templates": [
+    "form.html",
+    "spinner.html"
+  ]
+}

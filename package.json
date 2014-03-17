@@ -1,0 +1,37 @@
+{
+  "name": "inlineedit",
+  "version": "0.0.0",
+  "description": "A base component for creating inlineedit interfaces",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "clean": "rm -rf build",
+    "distclean": "rm -rf components node_modules",
+    "deps": "component install --dev",
+    "build": "component build --dev",
+    "test": "component test phantom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dominicbarnes/inlineedit.git"
+  },
+  "author": "Dominic Barnes <dominic@dbarnes.info>",
+  "homepage": "https://github.com/dominicbarnes/inlineedit",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dominicbarnes/inlineedit/issues"
+  },
+  "keywords": [
+    "inlineedit",
+    "finite-state-machine",
+    "machina",
+    "fsm",
+    "browser"
+  ],
+  "devDependencies": {
+    "component": "^0.19.7",
+    "component-test": "^0.1.3"
+  }
+}
