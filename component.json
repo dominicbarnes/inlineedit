@@ -25,6 +25,7 @@
   ],
   "templates": [
     "form.html",
+    "interface.html",
     "spinner.html"
   ]
 }
