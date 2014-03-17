@@ -1,5 +1,6 @@
 {
   "name": "inlineedit",
+  "version": "0.0.1",
   "dependencies": {
     "component/classes": "*",
     "component/domify": "*",
