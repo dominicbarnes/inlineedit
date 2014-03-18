@@ -60,7 +60,7 @@ module.exports = machina.Fsm.extend({
      *  - it *should* include a button[type="submit"]
      *  - it *should* include a button.inlineedit-cancel[type="button"]
      */
-    generateForm: require("./form.html"),
+    formElement: require("./form.html"),
 
     /**
      * Determines the structure for the editing interface. (later, the results
@@ -68,7 +68,7 @@ module.exports = machina.Fsm.extend({
      *
      * (see normalizeElement for possible values this property can take)
      */
-    generateInterface: require("./interface.html"),
+    interfaceElement: require("./interface.html"),
 
     /**
      * Determines the structure of the "processing indicator" (often called a
@@ -79,10 +79,10 @@ module.exports = machina.Fsm.extend({
      * Requirements:
      *  - it *should* be a block-level element (eg: <div>)
      */
-    generateSpinner: require("./spinner.html"),
+    spinnerElement: require("./spinner.html"),
 
     /**
-     * Combines the results of generateForm and generateInterface into a
+     * Combines the results of formElement and interfaceElement into a
      * complete UI for the user. This hook can also be used to add any other
      * components or event-handlers.
      *
@@ -231,9 +231,9 @@ module.exports = machina.Fsm.extend({
         }
 
         this.container = document.createElement("div");
-        this.form = this.normalizeElement(this.generateForm);
-        this.interface = this.normalizeElement(this.generateInterface);
-        this.spinner = this.normalizeElement(this.generateSpinner);
+        this.form = this.normalizeElement(this.formElement);
+        this.interface = this.normalizeElement(this.interfaceElement);
+        this.spinner = this.normalizeElement(this.spinnerElement);
 
         this.prepareForm(this.interface, this.form);
 
