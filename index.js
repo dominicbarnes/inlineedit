@@ -200,7 +200,7 @@ module.exports = machina.Fsm.extend({
             return domify(el);
 
         case "function":
-            return this.normalizeElement(el());
+            return this.normalizeElement(el.call(this));
 
         default:
             throw new TypeError("string or element required");
