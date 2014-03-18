@@ -222,6 +222,17 @@ describe("InlineEdit(settings)", function () {
             expect(instance.normalizeElement(generate)).to.equal(el);
             destroyInstance(instance);
         });
+
+        it("should invoke the function and preserve context", function () {
+            var instance = createInstance();
+
+            instance.normalizeElement(function () {
+                expect(this).to.equal(instance);
+                return "<div></div>";
+            });
+
+            destroyInstance(instance);
+        });
     });
 
 
