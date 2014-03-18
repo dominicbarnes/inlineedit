@@ -73,8 +73,8 @@ describe("InlineEdit(settings)", function () {
         });
     });
 
-    describe("#generateForm", function () {
-        var prop = InlineEdit.prototype.generateForm;
+    describe("#formElement", function () {
+        var prop = InlineEdit.prototype.formElement;
 
         it("should be a string by default", function () {
             expect(prop).to.be.a("string");
@@ -95,8 +95,8 @@ describe("InlineEdit(settings)", function () {
         });
     });
 
-    describe("#generateInterface", function () {
-        var prop = InlineEdit.prototype.generateInterface;
+    describe("#interfaceElement", function () {
+        var prop = InlineEdit.prototype.interfaceElement;
 
         it("should be a string by default", function () {
             expect(prop).to.be.a("string");
@@ -116,8 +116,8 @@ describe("InlineEdit(settings)", function () {
         });
     });
 
-    describe("#generateSpinner", function () {
-        var prop = InlineEdit.prototype.generateSpinner;
+    describe("#spinnerElement", function () {
+        var prop = InlineEdit.prototype.spinnerElement;
 
         it("should be a string by default", function () {
             expect(prop).to.be.a("string");
@@ -141,8 +141,8 @@ describe("InlineEdit(settings)", function () {
         var fn = InlineEdit.prototype.prepareForm;
 
         it("should insert the input before any other elements", function () {
-            var form = domify(InlineEdit.prototype.generateForm);
-            var input = domify(InlineEdit.prototype.generateInterface);
+            var form = domify(InlineEdit.prototype.formElement);
+            var input = domify(InlineEdit.prototype.interfaceElement);
 
             fn(input, form);
 

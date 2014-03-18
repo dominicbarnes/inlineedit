@@ -60,15 +60,15 @@ to reflect that new value.
 The default behavior is to take `val`, trim it and set that `String` as the
 text content of the element. (`el`)
 
-### generateForm
+### formElement
 
 This property/method is responsible for constructing the container `<form>`
 that will take the user's input. This does **not** define the interface itself,
-(eg: an `<input>` or `<textarea>`) see `generateInterface`.
+(eg: an `<input>` or `<textarea>`) see `interfaceElement`.
 
 It can take several forms. If it is a `String`, then it is run through
 [domify](http://github.com/component/domify). If it is a `Function`, then that
-function is run and the results are passed back into `generateForm`. Lastly,
+function is run and the results are passed back into `formElement`. Lastly,
 if it is a `HTMLElement`, it will use that element reference directly.
 
 The generated element should meet the following criteria: (I've tried to keep
@@ -80,34 +80,34 @@ this list as minimal as possible)
 
 The default is the `String` contents of `form.html`.
 
-### generateInterface
+### interfaceElement
 
 This property/method is responsible for constructing the interface that the user
 will be presented with for editing. (eg: an `<input>`, `<textarea>` or similar)
 
-Like `generateForm`, it can take a `String`, `HTMLElement` or `Function` as
+Like `formElement`, it can take a `String`, `HTMLElement` or `Function` as
 it's only argument.
 
 The default is the `String` contents of `interface.html`.
 
-### generateSpinner
+### spinnerElement
 
 This property/method is responsible for constructing the element that will be
 displayed to the user while the submission is being processed.
-(see `generateForm` for the possible forms this property can take)
+(see `formElement` for the possible forms this property can take)
 
 The generated element should meet the following criteria:
 
  * it *should* be a block-level element (eg: `<div>`)
 
-Like `generateForm`, it can take a `String`, `HTMLElement` or `Function` as
+Like `formElement`, it can take a `String`, `HTMLElement` or `Function` as
 it's only argument.
 
 The default is the `String` contents of `spinner.html`
 
 ### prepareForm(input, form)
 
-This method merges the results of `generateForm` and `generateInterface`. You
+This method merges the results of `formElement` and `interfaceElement`. You
 can use this to customize how your interface fits into the form.
 
 This only runs **once** (during initialization)
@@ -117,7 +117,7 @@ to the form.
 
 ### populateForm(val, form)
 
-This method takes the adjust the input element(s) of `form` (see `generateForm`)
+This method takes the adjust the input element(s) of `form` (see `formElement`)
 and sets their value(s) to reflect `val`. (see `parseValue`) It is run each time
 the user activates the form by clicking on the root element.
 
