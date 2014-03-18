@@ -7,10 +7,10 @@
     "component/events": "*",
     "component/trim": "*",
     "component/type": "*",
+    "dominicbarnes/wrap": "*",
     "ifandelse/machina.js": "*",
     "matthewp/text": "*",
-    "yields/empty": "*",
-    "yields/wrap": "*"
+    "yields/empty": "*"
   },
   "development": {
     "adamsanderson/trigger-event": "*",
