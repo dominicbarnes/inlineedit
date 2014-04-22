@@ -106,7 +106,7 @@ module.exports = machina.Fsm.extend({
      * @param {HTMLFormElement} form
      */
     populateForm: function (val, form) {
-        var input = form.elements[0];
+        var input = form.elements.item(0);
         input.value = val;
         input.focus();
     },
@@ -119,7 +119,7 @@ module.exports = machina.Fsm.extend({
      * @returns {String}
      */
     processForm: function (form) {
-        return form.elements[0].value;
+        return form.elements.item(0).value;
     },
 
     /**
