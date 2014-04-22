@@ -1,4 +1,10 @@
 
+0.0.4 / 2014-04-22
+==================
+
+ * bugfix: using `HTMLFormElement#elements` in a cross-browser fashion
+
+
 0.0.3 / 2014-03-18
 ==================
 
