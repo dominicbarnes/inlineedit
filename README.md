@@ -136,8 +136,13 @@ The default behavior is to return the first input's value.
 ### submitForm(val, done)
 
 This method is responsible for taking `val` (see `processForm`) and persisting
-the change to your application. (such as via AJAX) It receives a `done` callback
-which is to be called upon with an optional `err` param upon completion.
+the change to your application. (such as via AJAX) The `done` parameter is a
+callback function that you need to call upon completion of your submit.
+
+The `done` callback has 2 *optional* arguments:
+
+1) an `err` with an `Error` instance (if an error occurred)
+2) a custom `val`, in case you need to use a different value than the one you submitted
 
 The default behavior is a "no-op", as such this will **need** to be overridden
 by the developer.
