@@ -161,7 +161,7 @@ module.exports = machina.Fsm.extend({
     destroy: function () {
         this.events.unbind();
 
-        classes(this.element).remove("inlineedit");
+        classes(this.container).remove("inlineedit");
         classes(this.element).remove("inlineedit-content");
 
         this.container.parentNode.replaceChild(this.element, this.container);
@@ -286,16 +286,16 @@ module.exports = machina.Fsm.extend({
 
                 this.showElement(this.spinner);
 
-                this.submitForm(val, function (err) {
+                this.submitForm(val, function (err, newVal) {
                     if (err) {
                         self.handle("error", err);
                     } else {
-                        self.value = val;
-                        self.handle("success");
+                        self.handle("success", typeof newVal !== "undefined" ? newVal : val);
                     }
                 });
             },
-            success: function () {
+            success: function (val) {
+                this.value = val;
                 this.emit("saved");
                 this.transition("ready");
             },
