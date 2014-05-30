@@ -161,7 +161,7 @@ module.exports = machina.Fsm.extend({
     destroy: function () {
         this.events.unbind();
 
-        classes(this.element).remove("inlineedit");
+        classes(this.container).remove("inlineedit");
         classes(this.element).remove("inlineedit-content");
 
         this.container.parentNode.replaceChild(this.element, this.container);
