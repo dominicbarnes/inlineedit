@@ -412,6 +412,24 @@ describe("InlineEdit(settings)", function () {
                     done();
                 });
             });
+
+            it("should use a custom value if passed", function (done) {
+                var instance = createInstance({
+                    initialState: "editing",
+                    submitForm: function (val, done) {
+                        done(null, "Hello World");
+                    }
+                });
+
+                instance.form.elements[0].value = "Foo Bar Baz";
+                trigger(instance.form, "submit");
+
+                nextTick(function () {
+                    expect(instance.value).to.equal("Hello World");
+                    destroyInstance(instance);
+                    done();
+                });
+            });
         });
     });
 });
