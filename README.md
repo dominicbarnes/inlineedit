@@ -43,6 +43,12 @@ Any of the properties/methods below can be overridden safely either during
 initialization (`new InlineEdit({ ... });`) or during an `extend` operation.
 (`var MyInlineEdit = InlineEdit.extend({ ... });`)
 
+### placeholder
+
+When this property is set as a `String`, that value will be interpreted as empty.
+The `parseValue()` and `formatValue()` methods reference this property, so any
+subclasses should also respect this property.
+
 ### parseValue(el)
 
 This method is responsible for taking the root element (`el`) and parsing it's

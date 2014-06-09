@@ -1,6 +1,6 @@
 {
   "name": "inlineedit",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A base component for creating inlineedit interfaces",
   "main": "index.js",
   "directories": {
