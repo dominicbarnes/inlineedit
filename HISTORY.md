@@ -1,3 +1,6 @@
+# 0.0.6 / 2014-06-09
+ * Adding `placeholder` support
+
 # 0.0.5 / 2014-05-29
  * allowing `submitForm` `done()` callback to accept a custom value
  * fixing small bug in `destroy()` method
