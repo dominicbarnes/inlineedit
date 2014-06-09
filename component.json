@@ -1,6 +1,6 @@
 {
   "name": "inlineedit",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "dependencies": {
     "component/classes": "*",
     "component/domify": "*",
@@ -8,13 +8,13 @@
     "component/trim": "*",
     "component/type": "*",
     "dominicbarnes/wrap": "*",
-    "ifandelse/machina.js": "*",
+    "ifandelse/machina.js": "master",
     "matthewp/text": "*",
     "yields/empty": "*"
   },
   "development": {
     "adamsanderson/trigger-event": "*",
-    "dominicbarnes/expect.js": "*",
+    "dominicbarnes/expect.js": "master",
     "timoxley/next-tick": "*"
   },
   "scripts": [

@@ -28,6 +28,20 @@ var wrap = require("wrap");
 
 // single export
 module.exports = machina.Fsm.extend({
+    // configuration properties
+
+    /**
+     * If provided, finding this value in the element's place will treat it as empty.
+     *
+     * For example, for an optional field like "description", you could output "n/a"
+     * if there is no value. That way the user still has a click-target for starting
+     * the edit.
+     *
+     * @property {String}
+     */
+    placeholder: null,
+
+
     // the methods that may safely be overridden
 
     /**
@@ -37,7 +51,9 @@ module.exports = machina.Fsm.extend({
      * @returns {String}
      */
     parseValue: function (el) {
-        return trim(text(el));
+        var val = trim(text(el));
+        if (this.placeholder && val === this.placeholder) val = null;
+        return val;
     },
 
     /**
@@ -47,7 +63,9 @@ module.exports = machina.Fsm.extend({
      * @param {HTMLElement} el
      */
     formatValue: function (val, el) {
-        text(el, trim(val));
+        var out = trim(val || "");
+        if (this.placeholder && !out) out = this.placeholder;
+        text(el, out);
     },
 
     /**
