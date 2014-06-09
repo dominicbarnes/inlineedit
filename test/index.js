@@ -44,14 +44,28 @@ describe("InlineEdit(settings)", function () {
             var el = document.createElement("div");
             text(el, "Hello World");
 
-            expect(fn(el)).to.equal("Hello World");
+            expect(fn.call({}, el)).to.equal("Hello World");
         });
 
         it("should return a trimmed string", function () {
             var el = document.createElement("div");
             text(el, "  Hello World ");
 
-            expect(fn(el)).to.equal("Hello World");
+            expect(fn.call({}, el)).to.equal("Hello World");
+        });
+
+        it("should return null for the placeholder value", function () {
+            var el = document.createElement("div");
+            text(el, "n/a");
+
+            expect(fn.call({ placeholder: "n/a" }, el)).to.not.be.ok();
+        });
+
+        it("should behave normally if the value does not match the placeholder", function () {
+            var el = document.createElement("div");
+            text(el, "Hello World!");
+
+            expect(fn.call({ placeholder: "n/a" }, el)).to.equal("Hello World!");
         });
     });
 
@@ -60,14 +74,28 @@ describe("InlineEdit(settings)", function () {
 
         it("should set the text content of the element", function () {
             var el = document.createElement("div");
-            fn("Hello World", el);
+            fn.call({}, "Hello World", el);
 
             expect(text(el)).to.equal("Hello World");
         });
 
         it("should trim the text content", function () {
             var el = document.createElement("div");
-            fn("  Hello World   ", el);
+            fn.call({}, "  Hello World   ", el);
+
+            expect(text(el)).to.equal("Hello World");
+        });
+
+        it("should render the placeholder value if falsy", function () {
+            var el = document.createElement("div");
+            fn.call({ placeholder: "n/a" }, null, el);
+
+            expect(text(el)).to.equal("n/a");
+        });
+
+        it("should behave normally if the value does not match the placeholder", function () {
+            var el = document.createElement("div");
+            fn.call({ placeholder: "n/a" }, "Hello World", el);
 
             expect(text(el)).to.equal("Hello World");
         });
