@@ -1,3 +1,7 @@
+
+# 0.0.7 / 2014-10-14
+ * Pinning machina (#1)
+
 # 0.0.6 / 2014-06-09
  * Adding `placeholder` support
 
