@@ -8,7 +8,7 @@
     "component/trim": "*",
     "component/type": "*",
     "dominicbarnes/wrap": "*",
-    "ifandelse/machina.js": "v0.3.8",
+    "ifandelse/machina.js": "v0.4.3",
     "matthewp/text": "*",
     "yields/empty": "*"
   },
