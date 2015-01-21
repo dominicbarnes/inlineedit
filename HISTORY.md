@@ -1,4 +1,7 @@
 
+# 0.0.8 / 2015-01-20
+ * Updating machina (#2)
+
 # 0.0.7 / 2014-10-14
  * Pinning machina (#1)
 
